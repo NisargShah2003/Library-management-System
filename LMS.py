@@ -2,14 +2,17 @@ from datetime import datetime
 
 class Library :
     def __init__(self,AvailableBooks):
+        """Constructor for available and borrowed books""""
         self.books = AvailableBooks
         self.borrowList=[]
         
+        #Welcome message
         print()
         print('''\t Welcome to the Custom Library\t''')
         print()
 
     def getAvailableBooks(self):
+        """To get the available books"""
         with open("Records.txt",'a') as f:
             f.write(f"{log.time()} : {name1} have checked the list of available books in custom Library.\n")
 
@@ -18,6 +21,7 @@ class Library :
             print(f"    {book}")
 
     def getBorrowedBooks(self):
+        """To borrow the book"""
         log.borrow_book()
 
         print("The borrowed books are :")
@@ -25,6 +29,7 @@ class Library :
             print(f"{book}, ")
 
     def AddBook(self,add):
+        """To add the book into library"""
         with open("Records.txt",'a') as f:
             f.write(f"{log.time()} : {name1} have add {add}.\n")
 
@@ -32,14 +37,15 @@ class Library :
         self.books.append(add)
 
     def BorrowBook(self,name,borrow):
+        """To borrow the book"""
         if borrow in self.books:
             print(f"The {borrow} book is successfully borrowed by {name}. Please make sure to return it safely within 30 days.")
 
             with open("Records.txt",'a') as f:
                 f.write(f"{log.time()} : {name1} have borrowed {borrow}.\n")
 
-            self.books.remove(borrow)
-            self.borrowList.append(borrow)
+            self.books.remove(borrow) #Removing borrowed book from the available books list
+            self.borrowList.append(borrow) #Adding the borrowed book to borrowed list
             
             print("Available books after changes being made:")
         else :
@@ -48,25 +54,27 @@ class Library :
         self.getAvailableBooks()
 
     def ReturnBook(self,returnbook):
-        
+        """To return the book"""
         if returnbook in self.borrowList:
             print(f"The {returnbook} has been return successfully. Thank you for returning safe and wish you a good day!")
 
             with open("Records.txt",'a') as f:
                 f.write(f"{log.time()} : {name1} have returned {returnbook}.\n")
 
-            self.books.append(returnbook)
-            self.borrowList.remove(returnbook)
+            self.books.append(returnbook) #adding borrowed book from the available books list
+            self.borrowList.remove(returnbook) #removing the borrowed book to borrowed list
         else :
             print("You can't return the book you have not borrow. Please check the book name once again .")
 
 class Students:
     def __init__(self):
+        """Constructor which contains dictinory with key as username and password as value"""
         self.studentList = {"Kaushik":"2",
                            "Supan":"3",
                            "Hetal":"1"}
 
     def AddStudent(self):
+        """Sign up utility for new student"""
         n = input("Enter your name :")
         if n in self.studentList:
             print("The username already exists! please try again")
@@ -77,10 +85,12 @@ class Students:
             self.studentList[n] =  p
 
     def getdetails(self):
+        """"Welcome message to student after logging in """
         global name1
         name1 = input("Enter Your name :")
         rollNo = input("Enter Your RollNo. :")
 
+        #Authenticating the user with provided username to stored password
         if self.studentList.get(name1) == rollNo:
             print(f"\nWelcome {name1},We wish you great time in custom Library.\n")
             log.logged_in()
@@ -89,12 +99,14 @@ class Students:
             return False
 
     def RequestBook(self):
+        """Request for book which want to borrow"""
         req_book = input("Enter the book you want to request for : :")
-        return req_book
+        return req_book #Returns as argument for Library.BorrowBook
 
     def ReturnBooks(self):
+        """Return the book which want to return"""
         ret_book = input("Enter the book you want to return :")
-        return ret_book
+        return ret_book #Returns as argument for Library.ReturnBook
 
 class record :
     @staticmethod
@@ -104,17 +116,20 @@ class record :
 
         return current_time
     def logged_out(self):
+        """Records time when logged out"""
         with open("Records.txt",'a') as f:
                 f.write(f"{log.time()} : {name1} have logged out.\n")
     def logged_in(self):
+        """Records time when logged in"""
         with open("Records.txt",'a') as f:
                 f.write(f"{log.time()} : {name1} have logged in.\n")
     def borrow_book(self):
+        """Records time when borrowed book"""
         with open("Records.txt",'a') as f:
             f.write(f"{log.time()} : {name1} have checked the list of borrowed books.\n")
         
 student = Students()
-custom = Library(["Python","C","C++","Java","PHP"])
+custom = Library(["Python","C","C++","Java","PHP"]) #Lists containing the list of books
 log = record()
 
 try:
