@@ -120,5 +120,3 @@ class failed:
 
         with open("Records.txt",'a') as f:
             f.write(f"{success.time()} : {uname} have been failed to check the borrowed books due to {error}.\n")
-            
-    

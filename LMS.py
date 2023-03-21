@@ -37,11 +37,12 @@ class Library :
         """Add new user to user record"""
 
         name = input("Enter your username :")
-        Pass = input("Enter your Password :")
+        Pass = input("Enter your Password :").encode('utf-8')
         email = input("Enter your email :")
 
         ret = db.AddUser(name,Pass,email)
         if ret[0]:
+            print(f"{name} has been added sucessfully!")
             success.AddUser(name)
         else:
             failed.AddUser(name,ret[1])
@@ -57,7 +58,6 @@ class Library :
             print(f"{name} has been removed successfully!")
             success.RemoveUser(name)
         else:
-            
             failed.RemoveUser(name,ret[1])
             
 
@@ -110,7 +110,7 @@ class Students:
             List: Returns the true and false for successful and unsuccessful try. When it is successful also returns the name of the user
         """
         name = input("Enter Your name :")
-        Pass = input("Enter Your Password:")
+        Pass = input("Enter Your Password:").encode('utf-8')
 
         val = db.checkUser(name,Pass)
         

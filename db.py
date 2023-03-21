@@ -1,4 +1,5 @@
 import sqlite3
+import bcrypt
 
 def getAvailableBooks():
     try:
@@ -27,11 +28,11 @@ def AddBook(name,price):
         #Create table if not exists
         cursor.execute("""Create table if not exists books
                     (name text,
-                    price INTEGER,
+                    costPerDay INTEGER,
                     isBorrow NUMBER(1))""")
         
         #Enter values into table
-        cursor.execute("insert into books(name,price,isBorrow) values (?,?,?)",(name,price,0))
+        cursor.execute("insert into books(name,costPerDay,isBorrow) values (?,?,?)",(name,price,0))
 
         conn.commit()
         conn.close()
@@ -52,8 +53,10 @@ def AddUser(name,Pass,email):
                     Pass text,
                     email text)""")
         
+        hashed = bcrypt.hashpw(Pass,bcrypt.gensalt())
+        
         #Enter values into table
-        cursor.execute("""insert into users values (?,?,?)""",(name,Pass,email,))
+        cursor.execute("""insert into users values (?,?,?)""",(name,hashed,email,))
 
         conn.commit()
         conn.close()
@@ -135,19 +138,21 @@ def checkUser(name,Pass):
         cursor = conn.cursor()
         
         cursor.execute("select Pass from users where name = (?)",(name,))
-        val = cursor.fetchall()
+        val = cursor.fetchone()
         if val == []:
+            conn.commit()
+            conn.close()
             return [False,"Username does not exist!"]
         else:
-            val = val[0][0]
+            val = val[0]
 
-        conn.commit()
-        conn.close()
-        
-        if val == (Pass):
-            return [True]
-        else:
-            return [False,"Password does not match!"]
+            conn.commit()
+            conn.close()
+
+            if bcrypt.checkpw(Pass,val):
+                return [True]
+            else:
+                return [False,"Password does not match!"]
 
     except Exception as e:
         print(e)
@@ -182,3 +187,4 @@ def ReturnBook(uname,bname):
     
     except Exception as e:
         return [False,e]
+    
