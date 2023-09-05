@@ -23,8 +23,6 @@ def AddBook(name,price):
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
         
-        # cursor.execute("""drop table books""")
-        
         #Create table if not exists
         cursor.execute("""Create table if not exists books
                     (name text,
